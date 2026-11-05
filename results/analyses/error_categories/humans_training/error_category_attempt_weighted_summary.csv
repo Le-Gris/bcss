@@ -1,0 +1,9 @@
+analysis,mode,category,display_category,median,hdi_low,hdi_high,hdi_prob,n_obs,n_errors,n_programs,total_attempts
+error_category,attempt_weighted,attribute_substitution,Attr. Missel.,0.45168218533191784,0.43869015677865014,0.4661264585385292,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,scope_restriction,Scope Restr.,0.01978444195534989,0.01611076697686681,0.023934430604009918,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,operator_confusion,Op. Confusion,0.045212390673038394,0.036417032738137,0.05508332315494248,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,transformation_substitution,Transf. Missel.,0.10759917182712535,0.09766495456443669,0.11654424701816408,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,compositional_sequencing,Comp. Seq.,0.009319511054699458,0.005720173322063066,0.013384944563859403,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,partial_program,Partial Prog.,0.11944377363269447,0.10682083451766752,0.1316341065660889,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,boundary_precision,Boundary Prec.,0.023095830688256092,0.017327758429260324,0.02997519718749198,0.94,18448,1274,3690,1827
+error_category,attempt_weighted,unclassifiable,Unclassifiable,0.22348196383391794,0.21493391875828916,0.23298170551334754,0.94,18448,1274,3690,1827

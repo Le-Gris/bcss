@@ -1,0 +1,3 @@
+{"task_id": "00000001", "dataset": "demo", "source": "human", "output_grid": [[1, 0], [0, 1]], "attempt_count": 3, "descriptions": [{"response_id": "r-a", "text": "I rotated the grid."}, {"response_id": "r-b", "text": "Inverted the colours."}]}
+{"task_id": "00000002", "dataset": "demo", "source": "human", "output_grid": [[0, 0, 0], [0, 0, 0], [0, 0, 0]], "attempt_count": 1, "descriptions": []}
+{"task_id": "00000003", "dataset": "demo", "source": "model-x", "output_grid": [[5]], "attempt_count": 7, "descriptions": [{"response_id": "r-c", "text": "Just a single cell."}], "metadata": {"note": "carried through unchanged"}}

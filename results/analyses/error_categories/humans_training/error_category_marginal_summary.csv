@@ -1,0 +1,9 @@
+analysis,mode,category,display_category,median,hdi_low,hdi_high,hdi_prob,n_obs,n_errors,n_programs,total_attempts
+error_category,marginal,attribute_substitution,Attr. Missel.,0.3988205413437567,0.3790631581712463,0.41808934303785067,0.94,18448,1274,3690,
+error_category,marginal,scope_restriction,Scope Restr.,0.026782128097754963,0.021412400654000546,0.032354141674140344,0.94,18448,1274,3690,
+error_category,marginal,operator_confusion,Op. Confusion,0.04729874210611763,0.039650748581274396,0.05540242642234849,0.94,18448,1274,3690,
+error_category,marginal,transformation_substitution,Transf. Missel.,0.12359625297444132,0.10972770028074876,0.13911978764039984,0.94,18448,1274,3690,
+error_category,marginal,compositional_sequencing,Comp. Seq.,0.009880663918606748,0.006657207259489179,0.013675652932591924,0.94,18448,1274,3690,
+error_category,marginal,partial_program,Partial Prog.,0.09522063772384917,0.08344252381521872,0.10760487315766128,0.94,18448,1274,3690,
+error_category,marginal,boundary_precision,Boundary Prec.,0.029480109752235938,0.023178469062931157,0.03590775632434918,0.94,18448,1274,3690,
+error_category,marginal,unclassifiable,Unclassifiable,0.26805391551383495,0.24787871221774263,0.28661439901420205,0.94,18448,1274,3690,

@@ -1,0 +1,3 @@
+outcome,condition,mean,hdi_low,hdi_high,hdi_prob,n
+relative_length_change,control,-0.05197466023581445,-0.07594845931858672,-0.028442035005872612,0.94,633
+relative_length_change,treatment,-0.19093236931537147,-0.2061552748719013,-0.17582938072467202,0.94,3678

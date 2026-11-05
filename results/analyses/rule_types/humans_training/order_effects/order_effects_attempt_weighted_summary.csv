@@ -1,0 +1,5 @@
+analysis,source,mode,category,median,hdi_low,hdi_high,hdi_prob,n_errors,total_attempts
+order_effects,DSL,attempt_weighted,first-k,0.4104643758195465,0.38182712087561954,0.4400634875526521,0.94,302,507
+order_effects,DSL,attempt_weighted,last-k,0.16971587937060761,0.1484366886094405,0.19376802758624412,0.94,302,507
+order_effects,DSL,attempt_weighted,contiguous,0.04387284308128252,0.028809631055638645,0.05904492373777346,0.94,302,507
+order_effects,DSL,attempt_weighted,other,0.37506249118147494,0.3435023999327144,0.4060340029519662,0.94,302,507

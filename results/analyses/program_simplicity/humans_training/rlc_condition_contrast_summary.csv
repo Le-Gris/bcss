@@ -1,0 +1,2 @@
+outcome,contrast,mean,hdi_low,hdi_high,hdi_prob,p_gt_zero,p_lt_zero,n_control,n_treatment
+relative_length_change,treatment_minus_control,-0.138957709079557,-0.16256635041004652,-0.11435035026896227,0.94,0.0,1.0,633,3678

@@ -1,0 +1,4 @@
+analysis,source,mode,category,median,hdi_low,hdi_high,hdi_prob,n_errors,total_attempts
+rule_type,DSL,attempt_weighted,Neither,0.7616274881153825,0.7493878949019438,0.773989626134316,0.94,1274,1827
+rule_type,DSL,attempt_weighted,Partial match,0.2206816947751546,0.20803281967855677,0.23280728249963703,0.94,1274,1827
+rule_type,DSL,attempt_weighted,Alt. rule,0.017631710485418464,0.01269981480203751,0.022733472938471697,0.94,1274,1827
