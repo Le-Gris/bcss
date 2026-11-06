@@ -1,7 +1,8 @@
 # BCSS: Behavior-Conditioned Symbolic Synthesis
 
 Code for *Synthesizing symbolic models of human and machine reasoning at scale*
-(LeGris, Mondorf, Jin, Jagadish, Lake & Gureckis). Preprint: [PREPRINT LINK].
+(LeGris, Mondorf, Jin, Jagadish, Lake & Gureckis). Preprint:
+[arXiv:2611.07088](https://arxiv.org/abs/2611.07088).
 
 Behavior-Conditioned Symbolic Synthesis (BCSS) infers programs that explain
 individual responses. Given a reference program implementing the target rule
@@ -212,10 +213,19 @@ released under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 `hodel_dsl/` is adapted from
 [Michael Hodel's `arc-dsl`](https://github.com/michaelhodel/arc-dsl) (MIT; see
 [`hodel_dsl/LICENSE`](hodel_dsl/LICENSE)). The ARC-AGI tasks are published
-separately by François Chollet.
+separately by the ARC Prize Foundation.
 
 If you use this code, please cite:
 
 ```bibtex
-[BIBTEX PLACEHOLDER]
+@misc{legris2026synthesizing,
+  title         = {Synthesizing symbolic models of human and machine reasoning at scale},
+  author        = {LeGris, Solim and Mondorf, Philipp and Jin, Jinran and Jagadish, Akshay K. and Lake, Brenden M. and Gureckis, Todd M.},
+  year          = {2026},
+  eprint        = {2611.07088},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2611.07088},
+  url           = {https://arxiv.org/abs/2611.07088}
+}
 ```
