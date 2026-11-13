@@ -53,14 +53,18 @@ Check with the user before you run any of these:
 
   The API key is read from the environment (`GEMINI_API_KEY`, with
   `GOOGLE_API_KEY` as a fallback). Nothing loads a `.env` file.
-- **`bash run_analyses.sh OSF`** fits every Bayesian model with NUTS. It takes
-  about two hours, and the error-category model takes most of that time. It
-  overwrites the committed summaries in `results/analyses/`. For a quick
-  end-to-end check, write somewhere else with tiny sampler settings:
-  `OUT=/tmp/smoke bash run_analyses.sh OSF --draws 50 --tune 50 --chains 1`.
+- **`bash run_human_analyses.sh OSF`** fits every Bayesian model with NUTS. It
+  takes about two hours, and the error-category model takes most of that time.
+  It overwrites the committed summaries in `results/analyses/human/`. For a
+  quick end-to-end check, write somewhere else with tiny sampler settings:
+  `OUT=/tmp/smoke bash run_human_analyses.sh OSF --draws 50 --tune 50 --chains 1`
+  (the fits land in `/tmp/smoke/human/`).
+  `ANALYSES=` picks a subset to refit (e.g.
+  `ANALYSES="simplicity rule_types program_length"` skips the error-category
+  fit), and `DRY_RUN=1` prints the commands without running them.
 
-`bash reproduce_figures.sh` and `scripts/paper_counts.py` take seconds and make
-no API calls.
+`bash reproduce_human_figures.sh` and `scripts/paper_counts.py` take seconds
+and make no API calls.
 
 ## Data
 
@@ -70,10 +74,13 @@ go under `external/arc-agi-1/{training,evaluation}/`, which is also gitignored.
 Treat both as read-only inputs and never write into them. New outputs go under
 `results/` (gitignored, except `results/analyses/`).
 
-The committed results are `results/analyses/**` (summary CSVs and analysis
-PDFs) and `figures/insets/*.pdf` (the paper's Figure 2C, 3C and 4C insets).
-They are produced by `run_analyses.sh` and `reproduce_figures.sh`. Change them
-only by re-running those scripts, never by editing them by hand.
+The committed results are `results/analyses/human/<analysis>/humans_<split>/`
+(summary CSVs and analysis PDFs) and `figures/insets/*.pdf` (the paper's
+Figure 2C, 3C and 4C insets). They are produced by `run_human_analyses.sh` and
+`reproduce_human_figures.sh`. Change them only by re-running those scripts,
+never by editing them by hand. `reproduce_human_figures.sh` also writes
+transparent PNG copies next to the PDFs in `figures/insets/`; those are
+gitignored.
 
 ## Layout
 
@@ -86,6 +93,7 @@ only by re-running those scripts, never by editing them by hand.
 | `src/` | Shared code. `pipeline.py` holds the CLI arguments, prompt construction and the five run modes; `filters.py` the match tolerance; `program_edits.py` the edit schema; `gemini_client.py` the API client; `categorical_model.py` the hierarchical Bayesian model; `category_definitions.py` and `rule_types.py` the two taxonomies. |
 | `analyses/` | Statistical analyses (simplicity, rule types, error categories, program length). |
 | `figures/` | `render_insets.py` and `inset_style.py` draw the insets from the summary CSVs. |
+| `run_human_analyses.sh`, `reproduce_human_figures.sh` | Entry points: fit the models, then render the insets from their summaries. |
 | `prompts/` | The LLM prompt templates, written in Markdown with `{{placeholder}}` substitutions. |
 | `hodel_dsl/` | The DSL, its parser and rewriter, and the human-written training-split solvers (`solvers.py`). |
 | `tests/` | The test suite and a small fixture (`tests/fixtures/errors_sample.jsonl`). |

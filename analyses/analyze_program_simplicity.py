@@ -17,7 +17,7 @@ Usage:
     uv run python analyses/analyze_program_simplicity.py \\
         --treatment-candidates OSF/03_candidates/human/training.jsonl \\
         --control-candidates OSF/03_candidates/control/human_training.jsonl \\
-        --relative --output-dir results/analyses/program_simplicity/humans_training
+        --relative --output-dir results/analyses/human/program_simplicity/humans_training
 """
 
 import argparse
@@ -35,6 +35,7 @@ if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
 from src.bayes_defaults import add_sampling_args, fit_bambi
+from src.plotting import save_figure
 from src.program_complexity import safe_node_count as _safe_node_count
 from src.utils import load_jsonl_records
 
@@ -595,17 +596,7 @@ def plot_posterior(
     fig.tight_layout()
 
     prefix = meta["prefix"] + _executed_trace_suffix(executed_trace)
-    for ext in ("pdf", "png"):
-        path = output_dir / f"{prefix}_condition_posterior.{ext}"
-        fig.savefig(
-            path,
-            dpi=300,
-            bbox_inches="tight",
-            transparent=(transparent and ext == "png"),
-        )
-        print(f"Saved {path}")
-
-    plt.close(fig)
+    save_figure(fig, output_dir / f"{prefix}_condition_posterior", transparent=transparent)
 
 
 # ── Figure 2: condition means with posterior 94% HDIs + contrast overlay ─────
@@ -761,17 +752,7 @@ def plot_condition_means(
     fig.tight_layout()
 
     prefix = meta["prefix"] + _executed_trace_suffix(executed_trace)
-    for ext in ("pdf", "png"):
-        path = output_dir / f"{prefix}_condition_means.{ext}"
-        fig.savefig(
-            path,
-            dpi=300,
-            bbox_inches="tight",
-            transparent=(transparent and ext == "png"),
-        )
-        print(f"Saved {path}")
-
-    plt.close(fig)
+    save_figure(fig, output_dir / f"{prefix}_condition_means", transparent=transparent)
 
     means_path = output_dir / f"{prefix}_condition_means_summary.csv"
     pl.DataFrame(csv_rows).write_csv(means_path)
@@ -839,17 +820,7 @@ def plot_distribution(
     fig.tight_layout()
 
     prefix = meta["prefix"] + _executed_trace_suffix(executed_trace)
-    for ext in ("pdf", "png"):
-        path = output_dir / f"{prefix}_condition_distribution.{ext}"
-        fig.savefig(
-            path,
-            dpi=300,
-            bbox_inches="tight",
-            transparent=(transparent and ext == "png"),
-        )
-        print(f"Saved {path}")
-
-    plt.close(fig)
+    save_figure(fig, output_dir / f"{prefix}_condition_distribution", transparent=transparent)
 
 
 # ── Figure 4: Q-Q plot against Normal distribution ───────────────────────────
@@ -901,17 +872,7 @@ def plot_qq(
     fig.tight_layout()
 
     prefix = meta["prefix"] + _executed_trace_suffix(executed_trace)
-    for ext in ("pdf", "png"):
-        path = output_dir / f"{prefix}_condition_qq.{ext}"
-        fig.savefig(
-            path,
-            dpi=300,
-            bbox_inches="tight",
-            transparent=(transparent and ext == "png"),
-        )
-        print(f"Saved {path}")
-
-    plt.close(fig)
+    save_figure(fig, output_dir / f"{prefix}_condition_qq", transparent=transparent)
 
 
 # ── Main ─────────────────────────────────────────────────────────────────────
@@ -945,14 +906,14 @@ def main() -> None:
     )
     parser.add_argument(
         "--output-dir",
-        default="results/analyses/program_simplicity/humans_training",
+        default="results/analyses/human/program_simplicity/humans_training",
         help="Directory for plots and summaries "
-        "(default: results/analyses/program_simplicity/humans_training).",
+        "(default: results/analyses/human/program_simplicity/humans_training).",
     )
     parser.add_argument(
         "--transparent",
         action="store_true",
-        help="Save PNGs with transparent background",
+        help="Save figures (PNG and PDF) with a transparent background.",
     )
     parser.add_argument(
         "--ast",

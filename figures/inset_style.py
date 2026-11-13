@@ -2,7 +2,8 @@
 
 Two chart types: a stacked treatment-vs-control histogram (simplicity) and
 horizontal bar charts of posterior proportions with 94% HDI whiskers (rule
-types, order effects, error categories).  Figures are saved as PDF.
+types, order effects, error categories).  Figures are saved as PDF and PNG
+(300 dpi).
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ import numpy as np  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.rule_types import ORDER_TIER_ORDER, RULE_TYPE_ORDER  # noqa: E402,F401
 
-FORMATS = ("pdf",)
+FORMATS = ("pdf", "png")
 
 INK, MUTED = "#1a1a1a", "#6b6b6b"
 BLUE = "#4878cf"

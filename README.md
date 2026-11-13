@@ -97,31 +97,37 @@ All commands read from `OSF/`; nothing calls an API.
 the program-length analysis):
 
 ```bash
-bash run_analyses.sh OSF
+bash run_human_analyses.sh OSF
 ```
 
 This fits the simplicity and rule-type models on both splits, and the
 error-category and program-length models on the `training` split, with NUTS
 (4 chains, 5,000 draws, 2,000 tuning steps, seed 42). It writes plots and
 `*_summary.csv` files (posterior point estimates and 94% HDIs) to
-`results/analyses/`, one directory per analysis. The error-category model
-dominates the run time (about 2 hours on a laptop CPU).
+`results/analyses/human/`, one directory per analysis. Plots are saved as PNG
+and PDF with transparent backgrounds. The error-category model dominates the
+run time (about 2 hours on a laptop CPU). To refit only some analyses, list
+them in `ANALYSES` (default: all four), e.g.
+`ANALYSES="simplicity rule_types program_length" bash run_human_analyses.sh OSF`
+skips the error-category model.
 
 **2. Render the figures** (seconds):
 
 ```bash
-bash reproduce_figures.sh
+bash reproduce_human_figures.sh
 ```
 
 | Output (`figures/insets/`) | Paper |
 |---|---|
-| `fig2c_simplicity.pdf` | Figure 2C, simplicity bias |
-| `fig3c_rule_type.pdf` | Figure 3C, rule types |
-| `fig3c_order_effects.pdf` | Figure 3C, order effects |
-| `fig4c_error_category.pdf` | Figure 4C, error categories |
+| `fig2c_simplicity.{pdf,png}` | Figure 2C, simplicity bias |
+| `fig3c_rule_type.{pdf,png}` | Figure 3C, rule types |
+| `fig3c_order_effects.{pdf,png}` | Figure 3C, order effects |
+| `fig4c_error_category.{pdf,png}` | Figure 4C, error categories |
 
-The summaries in `results/analyses/` and the rendered insets are committed, so
-step 2 can be run, and the numbers checked, without step 1.
+The PNGs have a transparent background and are not committed.
+
+The summaries in `results/analyses/human/` and the rendered PDF insets are
+committed, so step 2 can be run, and the numbers checked, without step 1.
 
 **3. Compute the counts reported in the Results and Methods** (seconds):
 

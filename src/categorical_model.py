@@ -32,6 +32,7 @@ from src.bayes_defaults import (
     INFERENCE_METHOD,
     TARGET_ACCEPT,
 )
+from src.plotting import save_figure
 
 
 def hdi_bounds(
@@ -608,14 +609,15 @@ def print_latent_vpcs(
 def plot_variance_decomposition(
     idata: "az.InferenceData",
     categories: list[str],
-    output_path: Path,
+    output_stem: Path,
     short_names: dict[str, str] | None = None,
     transparent: bool = False,
 ) -> plt.Figure:
     """Two-panel figure: (a) sigma_u vs sigma_v, (b) reliability ratio.
 
     Only meaningful for 3-level models where both ``sigma_u`` and
-    ``sigma_v`` exist in the posterior.
+    ``sigma_v`` exist in the posterior.  Saved as ``<output_stem>.png`` and
+    ``<output_stem>.pdf``; the figure is returned open.
 
     Parameters
     ----------
@@ -703,8 +705,7 @@ def plot_variance_decomposition(
     ax2.set_xlim(0, 1)
 
     plt.tight_layout()
-    fig.savefig(output_path, dpi=300, bbox_inches="tight", transparent=transparent)
-    print(f"Saved figure to {output_path}")
+    save_figure(fig, output_stem, transparent=transparent, close=False)
 
     print("\nReliability (σ_u / (σ_u + σ_v)) per category dimension:")
     for label, r, lo, hi in zip(labels, rel_med, rel_lo, rel_hi):

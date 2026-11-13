@@ -14,7 +14,7 @@ Usage:
     uv run python analyses/analyze_error_category_distribution.py \
         --results-dir OSF/04_classifications/human/training.jsonl \
         --candidates-file OSF/03_candidates/human/training.jsonl \
-        --output-dir results/analyses/error_categories/humans_training
+        --output-dir results/analyses/human/error_categories/humans_training
 """
 
 from __future__ import annotations
@@ -51,6 +51,7 @@ from src.categorical_model import (
     print_latent_vpcs,
 )
 from src.category_definitions import CATEGORY_NAMES
+from src.plotting import save_figure
 
 # ── Display labels ──────────────────────────────────────────────────────────
 
@@ -269,13 +270,15 @@ def _plot_count_distribution(
     scale: int,
     xlabel: str,
     title: str,
-    output_path: Path,
+    output_stem: Path,
     transparent: bool = False,
 ) -> plt.Figure:
     """Horizontal bar chart of a category distribution with 94% HDI whiskers.
 
     *probs* has shape ``(n_draws, K)``; counts are ``prob * scale``.  Categories
     are sorted classifiable-descending with ``unclassifiable`` pinned last.
+    Saved as ``<output_stem>.png`` and ``<output_stem>.pdf``; the figure is
+    returned open.
     """
     medians = np.median(probs, axis=0)
     lo, hi = hdi_bounds(probs)
@@ -325,9 +328,7 @@ def _plot_count_distribution(
 
     ax.set_xlim(0, max(count_hi) * 1.35)
     plt.tight_layout()
-    fig.savefig(output_path, dpi=300, bbox_inches="tight", transparent=transparent)
-    fig.savefig(output_path.with_suffix(".pdf"), bbox_inches="tight", transparent=transparent)
-    print(f"Saved figure to {output_path} (+ .pdf)")
+    save_figure(fig, output_stem, transparent=transparent, close=False)
     return fig
 
 
@@ -367,7 +368,7 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=_project_root / "results" / "analyses" / "error_categories" / "humans_training",
+        default=_project_root / "results" / "analyses" / "human" / "error_categories" / "humans_training",
         help="Directory for saved figures.",
     )
     add_sampling_args(parser)
@@ -380,7 +381,7 @@ def main() -> None:
     parser.add_argument(
         "--transparent",
         action="store_true",
-        help="Save figures with transparent background.",
+        help="Save figures (PNG and PDF) with a transparent background.",
     )
     parser.add_argument(
         "--show", action="store_true", help="Display plots interactively."
@@ -455,7 +456,7 @@ def main() -> None:
         idx["n_obs"],
         xlabel="Expected number of errors",
         title="Population-Level Error Category Distribution\n(Hierarchical Model, 94% HDI)",
-        output_path=args.output_dir / "error_category_distribution_hierarchical.png",
+        output_stem=args.output_dir / "error_category_distribution_hierarchical",
         transparent=args.transparent,
     )
     figures.append(fig_pop)
@@ -483,7 +484,7 @@ def main() -> None:
             "Marginal Error Category Distribution\n"
             "(Hierarchical Model, Random Effects Integrated, 94% HDI)"
         ),
-        output_path=args.output_dir / "error_category_distribution_marginal.png",
+        output_stem=args.output_dir / "error_category_distribution_marginal",
         transparent=args.transparent,
     )
     figures.append(fig_marginal)
@@ -522,8 +523,7 @@ def main() -> None:
             total_attempts,
             xlabel="Expected number of attempts",
             title="Attempt-Weighted Error Category Distribution\n(Hierarchical Model, 94% HDI)",
-            output_path=args.output_dir
-            / "error_category_distribution_attempt_weighted.png",
+            output_stem=args.output_dir / "error_category_distribution_attempt_weighted",
             transparent=args.transparent,
         )
         figures.append(fig_aw)
@@ -549,16 +549,13 @@ def main() -> None:
 
     # 9. Variance decomposition (3-level only)
     if three_level:
-        var_path = args.output_dir / "error_category_variance_decomposition.png"
         fig_var = plot_variance_decomposition(
             idata,
             idx["categories"],
-            var_path,
+            args.output_dir / "error_category_variance_decomposition",
             short_names=SHORT_NAMES,
             transparent=args.transparent,
         )
-        fig_var.savefig(var_path.with_suffix(".pdf"), bbox_inches="tight",
-                        transparent=args.transparent)
         figures.append(fig_var)
 
     if args.show:

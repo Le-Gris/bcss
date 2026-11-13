@@ -222,13 +222,16 @@ OSF/
 notebooks/
 plans/
 # Pipeline outputs stay local, except the analysis summaries and PDF figures
-# written by run_analyses.sh (the numbers behind the paper figures).
+# written by run_human_analyses.sh (the numbers behind the paper figures).
 results/*
 !results/analyses/
 results/analyses/**/*.png
 results/analyses/**/*.svg
 results/analyses/**/*.nc
 results/analyses/**/*.npy
+# reproduce_human_figures.sh also writes transparent PNG copies of the insets; only
+# the PDFs are committed.
+figures/insets/*.png
 visualizations/
 *.DS_Store
 .cursor

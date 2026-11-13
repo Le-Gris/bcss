@@ -71,7 +71,7 @@ def main() -> None:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--osf-dir", type=Path, default=Path("OSF"))
     p.add_argument("--output-root", type=Path,
-                   default=ROOT / "results" / "analyses" / "program_simplicity")
+                   default=ROOT / "results" / "analyses" / "human" / "program_simplicity")
     args = p.parse_args()
 
     for split, (treat, ctrl) in SPLITS.items():

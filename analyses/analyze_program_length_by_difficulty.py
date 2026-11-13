@@ -19,7 +19,7 @@ Usage:
         --char-file OSF/04_classifications/human/training.jsonl \\
         --success-rate-file OSF/00_inputs/human/harc_task_difficulty.csv \\
         --relative --alpha 0.1 \\
-        --output-dir results/analyses/program_length_by_difficulty/humans_training
+        --output-dir results/analyses/human/program_length_by_difficulty/humans_training
 """
 
 from __future__ import annotations
@@ -52,6 +52,7 @@ from src.bayes_defaults import (
     add_sampling_args,
 )
 from src.category_definitions import CATEGORY_NAMES, DISPLAY_LABEL_OVERRIDES
+from src.plotting import save_figure
 from src.utils import grid_hash, load_jsonl_records
 
 # Category order for the count-tally / mixture components: the seven cognitive
@@ -618,19 +619,6 @@ def save_length_summaries(
 # ── Plotting ─────────────────────────────────────────────────────────────────
 
 
-def _save(fig: plt.Figure, output_dir: Path, stem: str, transparent: bool) -> None:
-    for ext in ("pdf", "png"):
-        path = output_dir / f"{stem}.{ext}"
-        fig.savefig(
-            path,
-            dpi=300,
-            bbox_inches="tight",
-            transparent=(transparent and ext == "png"),
-        )
-        print(f"Saved {path}")
-    plt.close(fig)
-
-
 def _plot_single_posterior(
     post: np.ndarray,
     var_label: str,
@@ -686,7 +674,7 @@ def _plot_single_posterior(
     ax.set_ylim(bottom=0)
     _apply_pub_style(ax)
     fig.tight_layout()
-    _save(fig, output_dir, stem, transparent)
+    save_figure(fig, output_dir / stem, transparent=transparent)
 
 
 def plot_scalar_posterior(
@@ -747,7 +735,7 @@ def plot_category_forest(
     _apply_pub_style(ax)
     fig.tight_layout()
     prefix = _PREFIX_MAP.get(outcome, outcome)
-    _save(fig, output_dir, f"{file_prefix}{prefix}_category_forest", transparent)
+    save_figure(fig, output_dir / f"{file_prefix}{prefix}_category_forest", transparent=transparent)
 
 
 def _partial_residual_plot(
@@ -867,11 +855,10 @@ def _partial_residual_plot(
     _apply_pub_style(ax)
     fig.tight_layout()
     prefix = _PREFIX_MAP.get(outcome, outcome)
-    _save(
+    save_figure(
         fig,
-        output_dir,
-        f"{file_prefix}{prefix}_partial_residuals_{predictor_col}",
-        transparent,
+        output_dir / f"{file_prefix}{prefix}_partial_residuals_{predictor_col}",
+        transparent=transparent,
     )
 
 
@@ -920,7 +907,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--output-dir",
-        default="results/analyses/program_length_by_difficulty/humans_training",
+        default="results/analyses/human/program_length_by_difficulty/humans_training",
         help="Directory to save figures.",
     )
     parser.add_argument(
@@ -931,7 +918,7 @@ def main() -> None:
     parser.add_argument(
         "--transparent",
         action="store_true",
-        help="Save PNGs with a transparent background.",
+        help="Save figures (PNG and PDF) with a transparent background.",
     )
     parser.add_argument(
         "--no-title",

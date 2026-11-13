@@ -14,7 +14,7 @@ outputs go in ``<output-dir>/order_effects/``.
 Usage:
     uv run python analyses/analyze_rule_type_distribution.py --analysis both \\
         --dsl-input OSF/03_candidates/human/training.jsonl \\
-        --output-dir results/analyses/rule_types/humans_training
+        --output-dir results/analyses/human/rule_types/humans_training
 """
 
 from __future__ import annotations
@@ -48,6 +48,7 @@ from src.categorical_model import (
     print_diagnostics,
     print_latent_vpcs,
 )
+from src.plotting import save_figure
 from src.rule_types import (
     ORDER_TIER_ORDER,
     RULE_TYPE_DISPLAY,
@@ -182,7 +183,6 @@ def plot_distribution(
     n_errors: int,
     title: str = "Rule Type Distribution",
     color: str = "#555555",
-    transparent: bool = False,
     category_order: list[str] = RULE_TYPE_ORDER,
     count_label: str = "errors",
 ) -> plt.Figure:
@@ -205,8 +205,6 @@ def plot_distribution(
     yerr = np.array([med_ord - lo_ord, hi_ord - med_ord])
 
     fig, ax = plt.subplots(figsize=(7, 4))
-    if not transparent:
-        fig.patch.set_facecolor("white")
 
     ax.bar(
         x,
@@ -342,17 +340,6 @@ def _save_distribution_summary(
     print(f"Saved {output_path}")
 
 
-def _save_figure(fig: plt.Figure, path: Path, transparent: bool = False) -> None:
-    """Save figure as both PNG and PDF, then close."""
-    save_kwargs = dict(dpi=300, bbox_inches="tight", transparent=transparent)
-    if not transparent:
-        save_kwargs["facecolor"] = "white"
-    fig.savefig(path, **save_kwargs)
-    fig.savefig(path.with_suffix(".pdf"), **save_kwargs)
-    print(f"Saved {path}")
-    plt.close(fig)
-
-
 def fit_and_report(
     df: pl.DataFrame,
     output_dir: Path,
@@ -428,13 +415,11 @@ def fit_and_report(
 
     plot_kwargs = dict(
         color=COLOR,
-        transparent=transparent,
         category_order=category_order,
     )
 
     # Population distribution
     pop_probs = compute_population_probs(idata, idx["K"])
-    pop_path = sub_dir / f"{analysis_name}_population.png"
     fig_pop = plot_distribution(
         pop_probs,
         idx["categories"],
@@ -442,14 +427,13 @@ def fit_and_report(
         title=f"{label} — Population ({analysis_title})",
         **plot_kwargs,
     )
-    _save_figure(fig_pop, pop_path, transparent)
+    save_figure(fig_pop, sub_dir / f"{analysis_name}_population", transparent=transparent)
 
     # Marginal distribution (uniform over errors)
     print("\nComputing population-average marginal distribution ...")
     marg_probs = compute_population_average_marginal(
         idata, idx["K"], three_level=False, random_seed=seed
     )
-    marg_path = sub_dir / f"{analysis_name}_marginal.png"
     fig_marg = plot_distribution(
         marg_probs,
         idx["categories"],
@@ -457,7 +441,7 @@ def fit_and_report(
         title=f"{label} — Marginal ({analysis_title})",
         **plot_kwargs,
     )
-    _save_figure(fig_marg, marg_path, transparent)
+    save_figure(fig_marg, sub_dir / f"{analysis_name}_marginal", transparent=transparent)
 
     # Attempt-weighted marginal
     attempt_counts = build_attempt_counts(df, idx["error_ids"])
@@ -469,7 +453,6 @@ def fit_and_report(
             f"({total_attempts} total attempts) ..."
         )
         aw_probs = compute_attempt_weighted_sample_marginal(idata, idx, attempt_counts)
-        aw_path = sub_dir / f"{analysis_name}_attempt_weighted.png"
         fig_aw = plot_distribution(
             aw_probs,
             idx["categories"],
@@ -478,7 +461,9 @@ def fit_and_report(
             count_label="attempts",
             **plot_kwargs,
         )
-        _save_figure(fig_aw, aw_path, transparent)
+        save_figure(
+            fig_aw, sub_dir / f"{analysis_name}_attempt_weighted", transparent=transparent
+        )
     else:
         print("\n  No attempt_count column — skipping attempt-weighted plot")
         aw_probs = marg_probs
@@ -559,9 +544,13 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=_project_root / "results" / "analyses" / "rule_types" / "humans_training",
+        default=_project_root / "results" / "analyses" / "human" / "rule_types" / "humans_training",
     )
-    parser.add_argument("--transparent", action="store_true")
+    parser.add_argument(
+        "--transparent",
+        action="store_true",
+        help="Save figures (PNG and PDF) with a transparent background.",
+    )
     args = parser.parse_args()
 
     if pm is None:

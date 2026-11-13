@@ -1,12 +1,15 @@
-"""Render the result insets of Figures 2C, 3C and 4C as PDFs.
+"""Render the result insets of Figures 2C, 3C and 4C as PDF and transparent PNG.
 
-Reads the summaries written by ``run_analyses.sh`` (no model is fit here) and
-writes to ``figures/insets/``:
+Reads the summaries that ``run_human_analyses.sh`` writes under
+``results/analyses/human/`` (no model is fit here) and writes to
+``figures/insets/``:
 
-    fig2c_simplicity.pdf       relative length change, treatment vs control
-    fig3c_rule_type.pdf        neither / partial match / alternative rule
-    fig3c_order_effects.pdf    which training examples partial matches satisfy
-    fig4c_error_category.pdf   error-category distribution (training)
+    fig2c_simplicity.{pdf,png}       relative length change, treatment vs control
+    fig3c_rule_type.{pdf,png}        neither / partial match / alternative rule
+    fig3c_order_effects.{pdf,png}    which training examples partial matches satisfy
+    fig4c_error_category.{pdf,png}   error-category distribution (training)
+
+Only the PDFs are committed; the PNGs are gitignored.
 
 Bars are attempt-weighted posterior medians with 94% HDIs.  Axis titles are
 added in the composite figures, so the insets have none.
@@ -50,10 +53,12 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--analyses-dir", type=Path,
-                   default=HERE.parent / "results" / "analyses")
+                   default=HERE.parent / "results" / "analyses",
+                   help="Root of the analysis outputs; the human summaries are "
+                        "read from its human/ subdirectory.")
     p.add_argument("--output-dir", type=Path, default=HERE / "insets")
     args = p.parse_args()
-    a, out = args.analyses_dir, args.output_dir
+    a, out = args.analyses_dir / "human", args.output_dir
 
     # Figure 2C
     sim = []
